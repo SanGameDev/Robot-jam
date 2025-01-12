@@ -4,10 +4,12 @@ using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
 
+    public GameManager gameManager;
     public float Health = 100f;
     public Image HealthBar;
     public GameObject deathPanel;
     public GameObject playerHud;
+    public bool isDead = false;
 
     private PlayerSpecialAttacks SA;
 
@@ -29,6 +31,8 @@ public class PlayerHealth : MonoBehaviour
     public void PlayerDeath(){
         deathPanel.SetActive(true);
         playerHud.SetActive(false);
+        gameManager.GameOver();
         Cursor.lockState = CursorLockMode.Confined;
+        isDead = true;
     }
 }

@@ -36,10 +36,12 @@ public class PlayerSpecialAttacks : MonoBehaviour
 
     public Animator playerAnim;
     public GameObject slamAOETrigger;
+    public PlayerHealth playerHealth;
 
     void Start()
     {
         cameraScript = GetComponent<CameraMovement>();
+        playerHealth = GetComponent<PlayerHealth>();
         // Get InputAction references from Project-wide input actions.
         if (InputSystem.actions)
         {
@@ -51,7 +53,7 @@ public class PlayerSpecialAttacks : MonoBehaviour
 
     private void Update() {
         //Attack 1
-        if(specialAttack.IsPressed() && playerAnim.GetBool("hasStop") && !isOnCoolDown1){
+        if(specialAttack.IsPressed() && playerAnim.GetBool("hasStop") && !isOnCoolDown1 && !playerHealth.isDead){
             PlaySAttackAnimation("SpecialBumpAttack");
             coolDown1.fillAmount = 1.0f;
             isOnCoolDown1 = true;
@@ -59,7 +61,7 @@ public class PlayerSpecialAttacks : MonoBehaviour
             cameraScript.SetCameraSpeed(0.0f);
         }
         //Attack 3
-        if(specialAttack2.IsPressed() && playerAnim.GetBool("hasStop") && hasUnlockedSecond && !isOnCoolDown3){
+        if(specialAttack2.IsPressed() && playerAnim.GetBool("hasStop") && hasUnlockedSecond && !isOnCoolDown3 && !playerHealth.isDead){
             PlaySAttackAnimation("SpecialOraAttack");
             coolDown3.fillAmount = 1.0f;
             isOnCoolDown3 = true;
@@ -67,7 +69,7 @@ public class PlayerSpecialAttacks : MonoBehaviour
             cameraScript.SetCameraSpeed(0.1f);
         }
         //Attack 2
-        if(specialAttack3.IsPressed() && playerAnim.GetBool("hasStop") && hasUnlockedFirst && !isOnCoolDown2){
+        if(specialAttack3.IsPressed() && playerAnim.GetBool("hasStop") && hasUnlockedFirst && !isOnCoolDown2 && !playerHealth.isDead){
             PlaySAttackAnimation("SpecialSlamAttack");
             coolDown2.fillAmount = 1.0f;
             isOnCoolDown2 = true;
