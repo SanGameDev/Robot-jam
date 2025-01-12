@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     private int waitTime = 10;
     private int score;
 
-    private bool isGameOver;
+    [HideInInspector] public bool isGameOver;
 
     private void Start()
     {
@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
         {
             gameData.highScore = score;
             isGameOver = true;
-            
         }
     }
 

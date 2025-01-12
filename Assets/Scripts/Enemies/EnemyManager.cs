@@ -8,6 +8,7 @@ public class EnemyManager : MonoBehaviour
     private Animator animator;
     private EnemyMovement enemyMovement;
     private EnemyAttack enemyAttack;
+    private GameManager gameManager;
 
     private int health;
     [HideInInspector] public bool canAttack = true;
@@ -21,31 +22,41 @@ public class EnemyManager : MonoBehaviour
         enemyMovement = GetComponent<EnemyMovement>();
         enemyAttack = GetComponent<EnemyAttack>();
 
+        gameManager = FindAnyObjectByType<GameManager>();
+
         this.health = enemyData.health;
         this.attackCooldown = enemyData.attackCooldown;
     }
+
     private void Update() 
     {
-        if(enemyMovement.InAttackRange(enemyData.attackRange, player))
+        if(!gameManager.isGameOver)
         {
-            enemyMovement.StopMovement();
-            animator.SetBool("Moving", false);
-
-            if(canAttack)
+            if(enemyMovement.InAttackRange(enemyData.attackRange, player))
             {
-                animator.SetBool("Attacking", true);
-                enemyAttack.Attack(enemyData.damage, player);
+                enemyMovement.StopMovement();
+                animator.SetBool("Moving", false);
+
+                if(canAttack)
+                {
+                    animator.SetBool("Attacking", true);
+                    enemyAttack.Attack(enemyData.damage, player);
+                }
+                else
+                {
+                    StartCooldown();
+                }
             }
             else
             {
-                StartCooldown();
+                enemyMovement.MoveToAttackRange(enemyData.speed, player);
+                animator.SetBool("Moving", true);
+                animator.SetBool("Attacking", false);
             }
         }
         else
         {
-            enemyMovement.MoveToAttackRange(enemyData.speed, player);
-            animator.SetBool("Moving", true);
-            animator.SetBool("Attacking", false);
+            animator.SetTrigger("GameOv");
         }
     }
 
@@ -56,7 +67,7 @@ public class EnemyManager : MonoBehaviour
             if(health <= 0)
             {
                 FindAnyObjectByType<GameManager>().AddScore(10);
-                Destroy(gameObject);
+                animator.SetTrigger("Dead");
             }
         }
     }
@@ -74,5 +85,10 @@ public class EnemyManager : MonoBehaviour
     public void FinishedAttack()
     {
         animator.SetBool("Attacking", false);
+    }
+
+    public void DestroyEnemy()
+    {
+        Destroy(gameObject);
     }
 }
