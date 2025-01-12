@@ -38,6 +38,11 @@ public class PlayerSpecialAttacks : MonoBehaviour
     public GameObject slamAOETrigger;
     public PlayerHealth playerHealth;
     public CameraShake cameraShakeComponent;
+    public ParticleSystem sparksParticles;
+    public GameObject cloudsParticles;
+    public GameObject CloudsTransform;
+
+
 
     void Start()
     {
@@ -79,13 +84,7 @@ public class PlayerSpecialAttacks : MonoBehaviour
         }
     }
 
-    public void CallShake(float time){
-        StartCoroutine(cameraShakeComponent.Shake(time,0.4f));
-    }
-
-    public void BasicCallShake(float magnitude){
-        StartCoroutine(cameraShakeComponent.Shake(0.1f, magnitude));
-    }
+    
     
 #region Attack Control
 
@@ -97,11 +96,21 @@ public class PlayerSpecialAttacks : MonoBehaviour
 
     public void SpawnShockWave(){
         slamAOETrigger.SetActive(true); 
+        Instantiate(cloudsParticles,CloudsTransform.transform.position,CloudsTransform.transform.rotation);
     }
     public void DeactivateShockWave(){
         slamAOETrigger.SetActive(false); 
     }
+    public void CallShake(float time){
+        StartCoroutine(cameraShakeComponent.Shake(time,0.4f));
+    }
+    public void CallParticles(){
+        sparksParticles.Play();
+    }
 
+    public void BasicCallShake(float magnitude){
+        StartCoroutine(cameraShakeComponent.Shake(0.1f, magnitude));
+    }
 #endregion
 
 #region UI Control
