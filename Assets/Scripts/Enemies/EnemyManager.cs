@@ -9,6 +9,7 @@ public class EnemyManager : MonoBehaviour
     private EnemyMovement enemyMovement;
     private EnemyAttack enemyAttack;
 
+    private int health;
     private bool canAttack = true;
     private float attackCooldown;
 
@@ -20,6 +21,7 @@ public class EnemyManager : MonoBehaviour
         enemyMovement = GetComponent<EnemyMovement>();
         enemyAttack = GetComponent<EnemyAttack>();
 
+        this.health = enemyData.health;
         this.attackCooldown = enemyData.attackCooldown;
     }
     private void Update() 
@@ -42,6 +44,18 @@ public class EnemyManager : MonoBehaviour
             enemyMovement.MoveToAttackRange(enemyData.speed, player);
             animator.SetBool("Moving", true);
             animator.SetBool("Attacking", false);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(other.CompareTag("Hand"))
+        {
+            health -= 1;
+            if(health <= 0)
+            {
+                FindAnyObjectByType<GameManager>().AddScore(10);
+                Destroy(gameObject);
+            }
         }
     }
 
