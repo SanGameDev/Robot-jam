@@ -27,9 +27,12 @@ public class CameraMovement : MonoBehaviour
     private void Update() {
         //Camera movement rotates by the base of the parent object// if done with self it will flip out
         if(look.IsInProgress()){
-            print("Move Camera"); 
             rotate += new Vector3(0.0f, -look.ReadValue<Vector2>().x * speed, 0.0f);
             FPCamera.transform.eulerAngles = transform.eulerAngles - rotate;
         }
+    }
+
+    public void SetCameraSpeed(float newSpeed){
+        speed = newSpeed;
     }
 }
