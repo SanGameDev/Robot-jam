@@ -4,26 +4,37 @@ using UnityEngine.InputSystem;
 public class PlayerLightAttacks : MonoBehaviour
 {
     InputAction attack;
-    public GameObject lhand;
-    public GameObject rhand;
-    Vector3 rotate;
+    InputAction attack2;
+
+    public Animator playerAnim;
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         // Get InputAction references from Project-wide input actions.
         if (InputSystem.actions)
         {
             attack = InputSystem.actions.FindAction("Attack");
+            attack2 = InputSystem.actions.FindAction("Attack2");
         }
     }
 
     private void Update() {
         
-        if(attack.IsPressed()){
-            rotate += new Vector3(0.0f, 180.0f, 0.0f);
-            lhand.transform.eulerAngles = transform.eulerAngles - rotate;
-            print("Attack");
+        if(attack.IsPressed() && playerAnim.GetBool("hasStop")){
+            PlayAttackAnimation("LeftHandAttack");
+        }
+        if(attack2.IsPressed() && playerAnim.GetBool("hasStop")){
+            PlayAttackAnimation("RightHandAttack");
         }
     }
+
+    private void PlayAttackAnimation(string animation){
+        playerAnim.SetBool("hasStop",false);
+        playerAnim.Play(animation);
+    }
+
+    public void SetBooltrue(){
+        playerAnim.SetBool("hasStop",true);
+    }
+
 }

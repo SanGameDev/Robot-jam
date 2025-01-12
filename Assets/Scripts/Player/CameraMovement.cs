@@ -5,13 +5,17 @@ using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour
 {
-    InputAction look;
-    public Camera FPCamera;
+    #region Private Variables 
+        private Vector3 rotate;
+        private Camera FPCamera;
+        private InputAction look;
+    #endregion
+
     public float speed;
-    private Vector3 rotate;
 
     void Start()
     {
+        FPCamera = GetComponentInChildren<Camera>();
         Cursor.lockState = CursorLockMode.Locked;
         // Get InputAction references from Project-wide input actions.
         if (InputSystem.actions)
@@ -21,7 +25,7 @@ public class CameraMovement : MonoBehaviour
     }
 
     private void Update() {
-        
+        //Camera movement rotates by the base of the parent object// if done with self it will flip out
         if(look.IsInProgress()){
             print("Move Camera"); 
             rotate += new Vector3(0.0f, -look.ReadValue<Vector2>().x * speed, 0.0f);
