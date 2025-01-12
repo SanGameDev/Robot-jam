@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
@@ -37,7 +38,7 @@ public class EnemyManager : MonoBehaviour
                 enemyMovement.StopMovement();
                 animator.SetBool("Moving", false);
 
-                if(canAttack)
+                if(canAttack && health >= 1)
                 {
                     animator.SetBool("Attacking", true);
                     enemyAttack.Attack(enemyData.damage, player);
@@ -68,6 +69,7 @@ public class EnemyManager : MonoBehaviour
             {
                 FindAnyObjectByType<GameManager>().AddScore(10);
                 animator.SetTrigger("Dead");
+                Dead();
             }
         }
     }
@@ -90,5 +92,15 @@ public class EnemyManager : MonoBehaviour
     public void DestroyEnemy()
     {
         Destroy(gameObject);
+    }
+
+    public void Dead()
+    {
+        ParticleSystem[] particles = GetComponentsInChildren<ParticleSystem>();
+        particles = GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem particle in particles)
+        {
+            particle.Play();
+        }
     }
 }
