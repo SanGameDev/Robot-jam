@@ -6,6 +6,8 @@ public class PlayerHealth : MonoBehaviour
 
     public float Health = 100f;
     public Image HealthBar;
+    public GameObject deathPanel;
+    public GameObject playerHud;
 
     private PlayerSpecialAttacks SA;
 
@@ -16,13 +18,17 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(float Damage){
         Health -= Damage;
         HealthBar.fillAmount = Health/100f;
+
         SA.CheckIfUnlock(Health);
+        
         if(Health <= 0){
             PlayerDeath();
         }
     }
 
     public void PlayerDeath(){
-        print("dead");
+        deathPanel.SetActive(true);
+        playerHud.SetActive(false);
+        Cursor.lockState = CursorLockMode.Confined;
     }
 }
