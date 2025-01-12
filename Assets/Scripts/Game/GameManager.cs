@@ -7,8 +7,11 @@ public class GameManager : MonoBehaviour
     private int waitTime = 10;
     private int score;
 
+    private bool isGameOver;
+
     private void Start()
     {
+        isGameOver = false;
         StartCoroutine(StartGame());
     }
 
@@ -18,7 +21,8 @@ public class GameManager : MonoBehaviour
         GetComponent<SpawnManager>().StartSpawn();
         if(waitTime > 1)
             waitTime--;
-        StartCoroutine(StartGame());
+        if (!isGameOver)  
+            StartCoroutine(StartGame());
     }
 
     public void GameOver()
@@ -26,9 +30,9 @@ public class GameManager : MonoBehaviour
         if (score > gameData.highScore)
         {
             gameData.highScore = score;
+            isGameOver = true;
+            
         }
-
-        // open ui
     }
 
     public void AddScore(int amount)
