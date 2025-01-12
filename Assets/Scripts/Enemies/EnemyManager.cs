@@ -10,7 +10,7 @@ public class EnemyManager : MonoBehaviour
     private EnemyAttack enemyAttack;
 
     private int health;
-    private bool canAttack = true;
+    [HideInInspector] public bool canAttack = true;
     private float attackCooldown;
 
     private void Start() 
@@ -34,10 +34,12 @@ public class EnemyManager : MonoBehaviour
             if(canAttack)
             {
                 animator.SetBool("Attacking", true);
-                enemyAttack.Attack(enemyData.damage, player, enemyData.attackCooldown);
+                enemyAttack.Attack(enemyData.damage, player);
             }
             else
+            {
                 StartCooldown();
+            }
         }
         else
         {
@@ -71,7 +73,6 @@ public class EnemyManager : MonoBehaviour
 
     public void FinishedAttack()
     {
-        canAttack = false;
         animator.SetBool("Attacking", false);
     }
 }
