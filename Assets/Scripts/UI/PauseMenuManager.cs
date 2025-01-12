@@ -14,7 +14,7 @@ public class PauseMenuManager : MonoBehaviour
     }
 
     public void RetryButton(){
-        SceneManager.LoadScene("PaulTestScene");
+        SceneManager.LoadScene("Game");
     }
 
     public void Pause(){

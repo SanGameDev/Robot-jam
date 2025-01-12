@@ -8,7 +8,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject CreditPanel;
 
     public void OnPlayButton(){
-        SceneManager.LoadScene("PaulTestScene");
+        SceneManager.LoadScene("Game");
     }
 
     public void OnCreditsButton(){
