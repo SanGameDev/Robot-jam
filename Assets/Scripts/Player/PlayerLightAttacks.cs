@@ -6,6 +6,9 @@ public class PlayerLightAttacks : MonoBehaviour
     InputAction attack;
     InputAction attack2;
 
+//test
+    //public PlayerHealth ph;
+
     private CameraMovement cameraScript;
     public Animator playerAnim;
 
@@ -24,6 +27,7 @@ public class PlayerLightAttacks : MonoBehaviour
         //Attack inputs
         if(attack.IsPressed() && playerAnim.GetBool("hasStop")){
             PlayAttackAnimation("LeftHandAttack");
+            // testing to debug damage unlocks ph.TakeDamage(10f);
             cameraScript.SetCameraSpeed(0.01f);
         }
         if(attack2.IsPressed() && playerAnim.GetBool("hasStop")){

@@ -1,13 +1,38 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class PlayerSpecialAttacks : MonoBehaviour
 {
-    InputAction specialAttack;
-    InputAction specialAttack2;
-    InputAction specialAttack3;
-    
+
+#region private Variables 
+
+    private InputAction specialAttack;
+    private InputAction specialAttack2;
+    private InputAction specialAttack3;
+    private bool hasUnlockedFirst;
+    private bool hasUnlockedSecond;
     private CameraMovement cameraScript;
+    private float timeRemaining1 = 3f;
+    private float timeRemaining2 = 5f;
+    private float timeRemaining3 = 12f;
+    private bool isOnCoolDown1 = false;
+    private bool isOnCoolDown2 = false;
+    private bool isOnCoolDown3 = false;
+
+#endregion
+
+#region UI Images
+
+    public Image unlockImage1;
+    public Image unlockImage2;
+
+    public Image coolDown1;
+    public Image coolDown2;
+    public Image coolDown3;
+
+#endregion
 
     public Animator playerAnim;
     public GameObject slamAOETrigger;
@@ -25,20 +50,34 @@ public class PlayerSpecialAttacks : MonoBehaviour
     }
 
     private void Update() {
-        //Attack inputs
-        if(specialAttack.IsPressed() && playerAnim.GetBool("hasStop")){
-            PlaySAttackAnimation("SpecialSlamAttack");
+        //Attack 1
+        if(specialAttack.IsPressed() && playerAnim.GetBool("hasStop") && !isOnCoolDown1){
+            PlaySAttackAnimation("SpecialBumpAttack");
+            coolDown1.fillAmount = 1.0f;
+            isOnCoolDown1 = true;
+            Invoke( "ResetCooldown1", .1f );
             cameraScript.SetCameraSpeed(0.0f);
         }
-        if(specialAttack2.IsPressed() && playerAnim.GetBool("hasStop")){
+        //Attack 3
+        if(specialAttack2.IsPressed() && playerAnim.GetBool("hasStop") && hasUnlockedSecond && !isOnCoolDown3){
             PlaySAttackAnimation("SpecialOraAttack");
+            coolDown3.fillAmount = 1.0f;
+            isOnCoolDown3 = true;
+            Invoke( "ResetCooldown3", .1f );
             cameraScript.SetCameraSpeed(0.1f);
         }
-        if(specialAttack3.IsPressed() && playerAnim.GetBool("hasStop")){
-            PlaySAttackAnimation("SpecialBumpAttack");
+        //Attack 2
+        if(specialAttack3.IsPressed() && playerAnim.GetBool("hasStop") && hasUnlockedFirst && !isOnCoolDown2){
+            PlaySAttackAnimation("SpecialSlamAttack");
+            coolDown2.fillAmount = 1.0f;
+            isOnCoolDown2 = true;
+            Invoke("ResetCooldown2", .1f);
             cameraScript.SetCameraSpeed(0.0f);
         }
     }
+
+
+#region Attack Control
 
     //Function to call an attack --cleaner code
     private void PlaySAttackAnimation(string animation){
@@ -52,5 +91,60 @@ public class PlayerSpecialAttacks : MonoBehaviour
     public void DeactivateShockWave(){
         slamAOETrigger.SetActive(false); 
     }
+
+#endregion
+
+#region UI Control
+
+public void CheckIfUnlock(float currentHealth){
+        if(currentHealth < 75f && !hasUnlockedFirst){
+            //unlock one
+            unlockImage1.enabled = false;
+            hasUnlockedFirst = true;
+        }
+        if(currentHealth < 50f && !hasUnlockedSecond){
+            //unlock two
+            unlockImage2.enabled = false;
+            hasUnlockedSecond = true;
+        }
+    }
+
+private void ResetCooldown1(){
+        timeRemaining1 = timeRemaining1 - .1f;
+        if(timeRemaining1 > 0) {
+            coolDown1.fillAmount -= .033f;
+            Invoke ( "ResetCooldown1", .1f );
+        } else {
+            coolDown1.fillAmount = 0.0f;
+            timeRemaining1 = 3.0f;
+            isOnCoolDown1 = false;
+        }
+}
+
+private void ResetCooldown2(){
+        timeRemaining2 = timeRemaining2 - .1f;
+        if(timeRemaining2 > 0) {
+            coolDown2.fillAmount -= .02f;
+            Invoke ( "ResetCooldown2", .1f );
+        } else {
+            coolDown2.fillAmount = 0.0f;
+            timeRemaining2 = 5.0f;
+            isOnCoolDown2 = false;
+        }
+}
+
+private void ResetCooldown3(){
+        timeRemaining3 = timeRemaining3 - .1f;
+        if(timeRemaining3 > 0) {
+            coolDown3.fillAmount -= .00833f;
+            Invoke ( "ResetCooldown3", .1f );
+        } else {
+            coolDown3.fillAmount = 0.0f;
+            timeRemaining3 = 12.0f;
+            isOnCoolDown3 = false;
+        }
+}
+#endregion
+    
 
 }
