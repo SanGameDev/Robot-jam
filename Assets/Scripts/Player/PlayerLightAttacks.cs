@@ -14,7 +14,7 @@ public class PlayerLightAttacks : MonoBehaviour
 
     void Start()
     {
-        cameraScript = GetComponent<CameraMovement>();
+        cameraScript = GetComponentInChildren<CameraMovement>();
         playerHealth = GetComponent<PlayerHealth>();
         // Get InputAction references from Project-wide input actions.
         if (InputSystem.actions)
@@ -28,7 +28,6 @@ public class PlayerLightAttacks : MonoBehaviour
         //Attack inputs
         if(attack.IsPressed() && playerAnim.GetBool("hasStop") && !playerHealth.isDead){
             PlayAttackAnimation("LeftHandAttack");
-            // testing to debug damage unlocks playerHealth.TakeDamage(10f);
             cameraScript.SetCameraSpeed(0.01f);
         }
         if(attack2.IsPressed() && playerAnim.GetBool("hasStop")&& !playerHealth.isDead){

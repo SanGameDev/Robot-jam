@@ -37,6 +37,7 @@ public class PlayerSpecialAttacks : MonoBehaviour
     public Animator playerAnim;
     public GameObject slamAOETrigger;
     public PlayerHealth playerHealth;
+    public CameraShake cameraShakeComponent;
 
     void Start()
     {
@@ -78,7 +79,14 @@ public class PlayerSpecialAttacks : MonoBehaviour
         }
     }
 
+    public void CallShake(float time){
+        StartCoroutine(cameraShakeComponent.Shake(time,0.4f));
+    }
 
+    public void BasicCallShake(float magnitude){
+        StartCoroutine(cameraShakeComponent.Shake(0.1f, magnitude));
+    }
+    
 #region Attack Control
 
     //Function to call an attack --cleaner code
